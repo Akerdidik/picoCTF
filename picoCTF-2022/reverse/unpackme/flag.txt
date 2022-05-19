@@ -1,0 +1,35 @@
+Firstly download the file (unpackme-upx);
+
+After basic check (file <file_name>) we see that is ELF file executable with arch x86-64;
+
+exiftool - we see file have rw-r--r-- [we can only read, write and read only for secondary users];
+
+after making if executable(chmod +x) we see its hex values which was created after the creating ELF file type,(hexdump -C <file_name>)
+
+we see that in the 14-th line where should start the encoding part of .init, .data, etc instead of this we see empty blank * - which can be known as encoding or 
+compressing file by another apps in this case it is UPX;
+
+after all checks we can start this program;
+we see that it asks us for number lets check is it true;
+after few checks (0,-1,1) we can think it check for number so lets check for string (A,B,C), yes it checks strings;
+
+lets disasemble it, in my case i used IDA cause its best for 64 arch;
+we see few functions (4) lets check disassembled code for it;
+after all checks we see that all this functions is trash or functions which is starting the code;
+
+so the UPX compressing is messed up our file;
+lets check what UPX can do;
+man upx;
+we see that it can be decompressed (-d);
+so lets make another file which will be decompressed version of our original file lets name it decompressed_unpackme-upx;
+
+its already executable so we start it;
+seems that it copied our original file so check it with hexdump;
+we can see that UPX decoding is not on this file so maybe it will have main function on the IDA;
+
+Yes it has init func on the IDA which means that this is original source;
+after finding main function we see that it takes argument and takes it pointer than changes it into the int value;
+we see that it check is it equal to 754635;
+
+lets start our program and put 754635 into it;
+yes we got the flag and know that file can be decompressed by another apps and be still executable;
