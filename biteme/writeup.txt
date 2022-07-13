@@ -1,0 +1,15 @@
+Firstly as usual use nmap, then we found taht its simple machine with 22 and 80 port opened
+We use basic gobuster or dirbuster enumeration to find out hidden dirs. We found some special dir called /console.
+After some tikanie we found that is not simple SQL or other injections so we continue our enumeration.
+We use against /console gobuster to find maybe .php or .txt files?
+Then we found out from googling that mostly .php extensions are hidden from user so we can interract them with .phps extension.
+After seeing php code we can find that it is jason_test_account user.
+After we see another php file where we can find the solution, we create simple script with php extension for parsing it.
+Then we find out it has MFA code with 4 digit security, it maybe problem but we have many tools for solving it cause its only 10k possible variations so again bruteforce.
+After succesfull logging we can see page with file viewer options so it s simple that we can cat our id_rsa file from home directory.
+After logging into machine we obtain user.txt, we can continue so using sudo -l give us that we can access as fred user.
+After switchinng users we can enumerate with sudo -l and see that we have permissions for fail2ban options.
+This option is banning some options on the machine after the ssh failing into it, so we can abuse it and take it easy.
+After googling we find great solutions and copy it into our /etc/fail2ban/action.d/iptables-multiport.conf file.
+After changing it we can easily restart our machine then leave from it, then we should access into ssh to trigger the ban and gain access, so after failing we attempt with correct credentials and get root flag.
+IMBALANCE!
